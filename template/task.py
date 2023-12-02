@@ -1,8 +1,18 @@
+import re
+
 with open("input.txt") as infile:
     data = infile.read()
     
 data = data.split("\n")
-data = list(map(list, data))
+
+def parse_data(data):
+    result = []
+    game_re = re.compile(r"Game (\d+):")
+    
+    return result
+
+data = parse_data(data)
+print(data)
 
 def task1(data):
     return None
