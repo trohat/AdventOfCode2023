@@ -32,7 +32,9 @@ def task1(data):
     for game in data:
         is_ok = True
         for set in game["sets"]:
-            if "red" in set and set["red"] > 12 or "green" in set and set["green"] > 13 or "blue" in set and set["blue"] > 14:
+            if "red" in set and set["red"] > 12 \
+                or "green" in set and set["green"] > 13 \
+                or "blue" in set and set["blue"] > 14:
                 is_ok = False
         if is_ok:
             fit += game["id"]

@@ -15,10 +15,15 @@ data = parse_data(data)
 print(data)
 
 def task1(data):
-    return None
+    result = 0
+    
+    return result
 
 def task2(data):
-    return None
+    result = 0
+
+
+    return result
 
 print(f"Task1: {task1(data)}")
 print(f"Task2: {task2(data)}")
