@@ -23,7 +23,7 @@ print(data)
 def task1(data):
     result = 0
     for card in data:
-        score = 0
+        score = -1
         for has in card["have"]:
             if has in card["winning"]:
                 score += 1

@@ -2,7 +2,7 @@ from collections import Counter
 from functools import cmp_to_key
 from pprint import pprint
 
-with open("input.txt") as infile:
+with open("reddit.txt") as infile:
     data = infile.read()
     
 data = data.split("\n")
@@ -60,29 +60,21 @@ def task2(cards):
 
         def find_rank(c):
             joker = c["J"]
-            if joker > 0 and joker < 5:
-                used_joker = False
-                new_most_common = []
-                for i in c.most_common():
-                    if i[0] != "J" and not used_joker:
-                        new_most_common.append((i[0], i[1] + joker))
-                        used_joker = True
-                    elif i[0] != "J":
-                        new_most_common.append((i[0], i[1]))
-            else:
-                new_most_common = c.most_common()
-            print(new_most_common)
-            if new_most_common[0][1] == 5:
+            if joker == 5:
                 return 1
-            if new_most_common[0][1] == 4:
+            most_common = [[*x] for x in c.most_common() if x[0] != "J"]
+            most_common[0][1] += joker
+            if most_common[0][1] == 5:
+                return 1
+            if most_common[0][1] == 4:
                 return 2
-            if new_most_common[0][1] == 3 and new_most_common[1][1] == 2:
+            if most_common[0][1] == 3 and most_common[1][1] == 2:
                 return 3
-            if new_most_common[0][1] == 3:
+            if most_common[0][1] == 3:
                 return 4
-            if new_most_common[0][1] == 2 and new_most_common[1][1] == 2:
+            if most_common[0][1] == 2 and most_common[1][1] == 2:
                 return 5
-            if new_most_common[0][1] == 2:
+            if most_common[0][1] == 2:
                 return 6
             return 7
         
@@ -97,7 +89,7 @@ def task2(cards):
             return ranks.find(l1) - ranks.find(l2)
 
     cards.sort(key=cmp_to_key(type_func_with_joker), reverse=True)  # type: ignore
-    pprint(cards)
+    print(cards)
     result = 0
     for i, card in enumerate(cards, start=1):
         result += i * card[1]

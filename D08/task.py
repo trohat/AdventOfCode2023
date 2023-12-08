@@ -1,6 +1,7 @@
 import re
+import math
 
-with open("test2.txt") as infile:
+with open("input.txt") as infile:
     data = infile.read()
     
 data = data.split("\n\n")
@@ -15,7 +16,6 @@ def parse_data(data):
     return instructions, nodes
 
 data = parse_data(data)
-print(data)
 
 def task1(data):
     instructions = data[0]
@@ -37,18 +37,20 @@ def task2(data):
     instructions = data[0]
     nodes = data[1]
     positions = [pos for pos in nodes.keys() if pos.endswith("A")]
-    steps = 0
-    i_pos = 0
-    while True:
-        print(positions)
-        steps += 1
-        instr = instructions[i_pos]
-        index = 1 if instr == "R" else 0
-        positions = [nodes[pos][index] for pos in positions] 
-        if all(pos.endswith("Z") for pos in positions) or steps > 10:
-            break
-        i_pos = (i_pos + 1) % len(instructions)
-    return steps
+    cycles = []
+    for position in positions:
+        steps = 0
+        i_pos = 0
+        while True:
+            steps += 1
+            instr = instructions[i_pos]
+            index = 1 if instr == "R" else 0
+            position = nodes[position][index]
+            if position.endswith("Z"):
+                cycles.append(steps)
+                break
+            i_pos = (i_pos + 1) % len(instructions)
+    return math.lcm(*cycles)
 
-# print(f"Task1: {task1(data)}")
+print(f"Task1: {task1(data)}")
 print(f"Task2: {task2(data)}")
