@@ -7,13 +7,10 @@ data = data.split("\n")
 
 def add_empty_lines(image):
     new_lines = []
-    empty_line = ""
     for y, line in enumerate(image):
         if not "#" in line:
             new_lines.append(y)
-            empty_line = line
-    for y in new_lines[::-1]:            
-        image = np.insert(image, y, empty_line, axis=0)
+    image = np.insert(image, new_lines, ".", axis=0)
     return image
 
 def manhattan(a, b):
@@ -23,6 +20,7 @@ def task1(data):
     image = np.array([[ch for ch in line] for line in data])
     image = add_empty_lines(image)
     image = add_empty_lines(image.T).T
+    print(image)
     galaxies = []
     for y, line in enumerate(image):
         for x, char in enumerate(line):
@@ -55,7 +53,6 @@ def task2(data, larger=1000000):
             image[y] = line
     image = image.T
     image[image == 0] = 1    
-    print(image)
 
     path_sum = 0
     for i, g1 in enumerate(galaxies):
