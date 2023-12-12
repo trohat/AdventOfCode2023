@@ -1,6 +1,6 @@
 import re
 
-with open("input.txt") as infile:
+with open("test.txt") as infile:
     data = infile.read()
     
 data = data.split("\n")
