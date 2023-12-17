@@ -1,6 +1,11 @@
 import re
+import sys
 
-with open("test.txt") as infile:
+file = "test.txt"
+if len(sys.argv) > 1:
+    file = sys.argv[1]
+
+with open(file) as infile:
     data = infile.read()
     
 data = data.split("\n")
