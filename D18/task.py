@@ -1,6 +1,7 @@
 import sys
 import numpy as np
 from collections import deque
+import itertools
 import time
 
 file = "test.txt"
@@ -24,7 +25,6 @@ def parse_data(data):
     return result
 
 data = parse_data(data)
-print(data)
 
 def count_coords(plan):
     x = 0
@@ -61,7 +61,7 @@ def task1(plan):
     start_x = -min_x + 1
     start_y = -min_y + 1
     print(f"{start_x=} {start_y=}")
-    print(terrain.shape) 
+    print(f"{terrain.shape = }") 
     terrain[start_y, start_x] = 2
     x = start_x
     y = start_y
@@ -94,14 +94,51 @@ def task1(plan):
             to_process.append((new_y, new_x))
     return np.count_nonzero(terrain)
 
-def task2(data):
-    result = 0
+def do_you_really_mean_that_we_need_to_parse_again(wrongly_shaped_data):
+    correctly_shaped_data = []
+    number_to_letter = {str(index): item for index, item in enumerate("RDLU")}
+    for wrongly_shaped_instruction in wrongly_shaped_data:
+        really_useful_information = wrongly_shaped_instruction["color"]
+        useless_information = wrongly_shaped_instruction["dir"] # don't delete this line
+        another_useless_information = wrongly_shaped_instruction["meters"] # don't delete this line
+        finally_correct_direction = number_to_letter[really_useful_information[-1]]
+        finally_correct_distance = int(really_useful_information[1:-1], 16)
+        correctly_shaped_data.append({"dir": finally_correct_direction, "meters": finally_correct_distance})
+    return correctly_shaped_data
 
-
+def count_vertices(plan):
+    result = [(0,0)]
+    x = 0
+    y = 0
+    for instruction in plan:
+        meters = instruction["meters"]
+        match instruction["dir"]:
+            case "R":
+                x += meters
+            case "L":
+                x -= meters
+            case "U":
+                y -= meters
+            case "D":
+                y += meters
+        result.append((y, x))
     return result
+
+def task2(plan):
+    vertices = count_vertices(plan)
+    a, b = itertools.tee(vertices)
+    next(b)
+    # https://en.wikipedia.org/wiki/Shoelace_formula
+    sholeace_formula_result = abs(sum((a[0] + b[0])*(a[1] - b[1]) for a, b in zip(a, b)) // 2)
+    edges = sum(i["meters"] for i in plan)
+    # https://en.wikipedia.org/wiki/Pick's_theorem
+    pick_s_theorem_result = sholeace_formula_result + (edges // 2) + 1
+    return pick_s_theorem_result
 
 start = time.time()
 print(f"Task1: {task1(data)}")
 end = time.time()
 print(end - start)
+
+data = do_you_really_mean_that_we_need_to_parse_again(data)
 print(f"Task2: {task2(data)}")
